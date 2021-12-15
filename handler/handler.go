@@ -15,6 +15,17 @@ type ResponseInfo struct {
 	BaseName string `json:"baseName"`
 }
 
+type SuccessResponse struct {
+	Code    int          `json:"code"`
+	Message string       `json:"message"`
+	Info    ResponseInfo `json:"info"`
+}
+
+type ErrorResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
 func getFileNameWithoutExt(path string) string {
 	// https://qiita.com/KemoKemo/items/d135ddc93e6f87008521
 	// Fixed with a nice method given by mattn-san
@@ -31,7 +42,16 @@ func pdf2img(pdfBaseName string) error {
 	return err
 }
 
-// memo: plz function name is upper-case if will be accessed from outer file
+// Upload
+// @Summary      recieve pdf from FrontEnd
+// @Description  get pdf
+// @Tags         upload
+// @Accept       mpfd
+// @Produce      json
+// @Param        pdf  formData  file  true  "	"
+// @Success      200  {object}  SuccessResponse
+// @Failure      500  {object}  ErrorResponse
+// @Router       /upload/pdf [post]
 func UploadHandler(c *gin.Context) {
 	// get file
 	file, err := c.FormFile("pdf")
@@ -42,7 +62,7 @@ func UploadHandler(c *gin.Context) {
 	fBaseName := getFileNameWithoutExt(file.Filename)
 
 	if f, err := os.Stat("pdf/" + fBaseName + "/"); os.IsNotExist(err) || !f.IsDir() {
-		// check save directory: avoid not exist error
+		// check save directory
 		err = os.MkdirAll("./pdf/"+fBaseName, os.ModePerm)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})

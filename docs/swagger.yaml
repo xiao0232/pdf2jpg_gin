@@ -1,0 +1,61 @@
+basePath: /api
+definitions:
+  handler.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  handler.ResponseInfo:
+    properties:
+      baseName:
+        type: string
+      count:
+        type: integer
+    type: object
+  handler.SuccessResponse:
+    properties:
+      code:
+        type: integer
+      info:
+        $ref: '#/definitions/handler.ResponseInfo'
+      message:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: convert pdf to img(jpg)
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: pdf2img
+  version: "1.0"
+paths:
+  /upload/pdf:
+    post:
+      consumes:
+      - multipart/form-data
+      description: get pdf
+      parameters:
+      - description: "\t"
+        in: formData
+        name: pdf
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: recieve pdf from FrontEnd
+      tags:
+      - upload
+swagger: "2.0"
