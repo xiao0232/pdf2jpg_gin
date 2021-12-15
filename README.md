@@ -16,10 +16,24 @@ sudo apt-get install poppler-utils
 
 ## 開発の始め方
 0. `go mod tidy`
-1. `go run pdf2img.go`  
+1. `go run main.go`  
 -> [localhost:8000](http://localhost:8000)で立ち上がります
 
 ※環境変数"PORT"にポート番号が指定されている場合は、そちらで上書き可能です。
+
+## OpenAPIについて
+本プロジェクトでは、[swaggo/swag](https://github.com/swaggo/swag#mime-types)を採用しています。
+[OpenAPI comment format](https://github.com/swaggo/swag#declarative-comments-format)に従って適宜API仕様を追加してください。
+
+APIコメントの変更後、サーバー立ち上げ前に以下のコマンドを実行することでAPI仕様書を更新できます。
+```shell
+swag init
+```
+
+なお、OpenAPIは[localhost:8000/swagger/index.html](http://localhost:8000/swagger/index.html)で確認できます。
+
+![Screenshot 2021-12-15 at 23-50-27 Swagger UI](https://user-images.githubusercontent.com/80180411/146210515-e96e3984-7425-4e4f-8bd9-559132f23c9d.png)
+
 
 ## 使用イメージ(Front: React)
 
